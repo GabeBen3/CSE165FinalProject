@@ -3,12 +3,22 @@
 
 #include "Game.h"
 #include "TextureManager.h"
-#include "GameObject.h"
+#include "Map.h"
+#include "AllComponents.h"
+#include "Vector2D.h"
+#include "Collision.h"
 
-GameObject* player;
-GameObject* enemy;
+SDL_Renderer* Game::renderer = nullptr;	//Ptr to main renderer
 
-SDL_Renderer* Game::renderer = nullptr;
+Map* map;	//Instantiate map ptr
+
+Manager entityManager;	//Instatiate Manager to manage entities in the game
+
+auto& player(entityManager.addEntity());	//Create reference to new entity "player"
+auto& enemy(entityManager.addEntity());
+auto& wall(entityManager.addEntity());
+
+SDL_Event Game::event;		//Instantiate event detector
 
 //Game constructor
 Game::Game() {
@@ -32,6 +42,7 @@ void Game::init(const char* title, int x_pos, int y_pos, int width, int height, 
 	if (fullscreen == true) {
 		fullscreenflag = SDL_WINDOW_FULLSCREEN;
 	}
+
 	//Test if SDL is initialized
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 
@@ -61,8 +72,21 @@ void Game::init(const char* title, int x_pos, int y_pos, int width, int height, 
 		std::cout << "Game has exited" << std::endl;
 	}
 
-	player = new GameObject("assets/gutsSprite.png", 0, 0);
-	//enemy = new GameObject("assets/smokeMonster.png", renderer, 0, 0);
+	//Add components to entities	
+	player.addComponent<TransformComponent>();	
+	player.addComponent<SpriteComponent>("assets/gutsSprite.png");
+	player.addComponent<Controller>();
+	player.addComponent<ColliderComponent>("player");
+
+	enemy.addComponent<TransformComponent>(300, 300);
+	enemy.addComponent<SpriteComponent>("assets/smokeMonster.png", 200, 200);
+	enemy.addComponent<ColliderComponent>("enemy");
+
+
+
+
+
+	map = new Map();	//Create new map
 
 }
 
@@ -70,7 +94,6 @@ void Game::init(const char* title, int x_pos, int y_pos, int width, int height, 
 	//Quit Game
 void Game::eventHandler() {
 
-	SDL_Event event;
 	SDL_PollEvent(&event);
 
 	switch (event.type) {
@@ -86,7 +109,18 @@ void Game::eventHandler() {
 
 //All game objs will have their own update funcs -> updating scores, movement, assets, etc... 
 void Game::update() {
-	player->Update();
+
+	Vector2D playerPosition = player.getComponent<TransformComponent>().position;
+
+	entityManager.refresh();	//Check if entities need to be removed from world
+	entityManager.update();	//Update all components of all entities
+
+	if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
+		enemy.getComponent<ColliderComponent>().collider)) {
+
+		std::cout << "Collision Detected" << std::endl;
+		player.getComponent<TransformComponent>().position = playerPosition;
+	}
 }
 
 
@@ -95,10 +129,14 @@ void Game::render() {
 
 	SDL_RenderClear(renderer);
 	//Add more elements to render
+
+	map->drawMap();
+
+	//Render all existing entities to the screen->Compo
+	entityManager.draw();
 	
 	// Render Player to the screen
 								//Use entire img  //whole render frame
-	player->Render();
 
 	SDL_RenderPresent(renderer);	//Launch render
 

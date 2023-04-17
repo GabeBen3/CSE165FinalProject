@@ -41,8 +41,8 @@ int main(int argc, char* argv[]) {
 		
 
 		game->eventHandler();
-		game->update();
-		game->render();
+		game->update();		//Update all entities, map, components, etc...
+		game->render();		//Render map, entities, components, main window, etc...
 
 		frameTime = SDL_GetTicks() - frameStart;	// Get tick difference after game loop 
 

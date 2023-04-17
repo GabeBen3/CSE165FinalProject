@@ -1,5 +1,9 @@
-#pragma once
+//Header File to create and render GameObjects
 
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
+
+#pragma once
 #include "Game.h"
 
 class GameObject {
@@ -28,3 +32,5 @@ private:
 	//Renderer for object
 
 };
+
+#endif
