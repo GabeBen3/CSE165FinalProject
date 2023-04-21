@@ -41,8 +41,9 @@ public:
 
 	//Update position of transformation component relative to entity 
 	void update() override {
-		position.x += velocity.x * speed;
-		position.y += velocity.y * speed;
+
+		position.x += velocity.x;
+		position.y += velocity.y;
 
 	}
 
@@ -51,11 +52,35 @@ public:
 		velocity.zero(); //Zero out the velocity
 	}
 
+	void stepTowards(Vector2D goalPosition) {
+		speed = 1;
+		goalX = goalPosition.x;
+		goalY = goalPosition.y;
+		if (position.x < goalX) {
+			velocity.x = 1;
+		}
+		else if (position.x > goalX) {
+			velocity.x = -1;
+		}
+		else {
+			velocity.x = 0;
+		}
+		if (position.y < goalY) {
+			velocity.y = 1;
+		}
+		else if (position.y > goalY) {
+			velocity.y = -1;
+		}
+		else {
+			velocity.y = 0;
+		}
+	}
+
 
 
 private: 
 	int xPos, yPos;
-
+	int goalX, goalY;
 };
 
 #endif
