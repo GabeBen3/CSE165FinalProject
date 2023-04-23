@@ -14,6 +14,8 @@ public:
 	Game();
 	~Game();
 
+	void deathScreen(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);
+
 	void init(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);	//Initialize game window
 
 	void eventHandler();	//Handle events

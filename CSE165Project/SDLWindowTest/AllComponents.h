@@ -10,5 +10,6 @@
 #include "TransformComponent.h"
 #include "Controller.h"
 #include "CollisionComponent.h"
+#include "SwordComponent.h"
 
 #endif // !ALLCOMPONENTS_H

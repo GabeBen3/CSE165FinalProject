@@ -75,6 +75,14 @@ public:
 		}
 	}
 
+	void deactivate() {
+		active = false;
+	}
+
+	void activate() {
+		active = true;
+	}
+
 	//check if should be destroyed 
 	bool isActive() const {
 		return active;
@@ -90,6 +98,7 @@ public:
 		//return bool value if entity contains the component
 		return compBitSet[getComponentTypeID<T>()];
 	}
+
 
 	//Function to add component to entity
 	template <typename T, typename... TArgs> T& addComponent(TArgs&&... mArgs) {

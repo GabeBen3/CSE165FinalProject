@@ -152,6 +152,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="SwordComponent.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="AllComponents.h" />
     <ClInclude Include="TransformComponent.h" />

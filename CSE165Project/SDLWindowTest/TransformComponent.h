@@ -30,6 +30,14 @@ public:
 		position.y = _y;
 	}
 
+	TransformComponent(float _x, float _y, int _width, int _height) {
+		position.x = _x;
+		position.y = _y;
+
+		width = _width;
+		height = _height;
+	}
+
 	TransformComponent(float _x, float _y, int _width, int _height, int _scale) {
 		position.x = _x;
 		position.y = _y;
@@ -39,20 +47,10 @@ public:
 		scale = _scale;
 	}
 
-	//Update position of transformation component relative to entity 
-	void update() override {
 
-		position.x += velocity.x;
-		position.y += velocity.y;
+	bool stepTowards(Vector2D goalPosition) {
+		bool goalReached = false;
 
-	}
-
-	//Initialize velocity of t.c.
-	void init() override {
-		velocity.zero(); //Zero out the velocity
-	}
-
-	void stepTowards(Vector2D goalPosition) {
 		speed = 1;
 		goalX = goalPosition.x;
 		goalY = goalPosition.y;
@@ -74,13 +72,35 @@ public:
 		else {
 			velocity.y = 0;
 		}
+
+		if ((position.x == goalX) && (position.y == goalY) ||
+			(position.x == goalX + 80) && (position.y == goalY)){
+			goalReached = true;
+		}
+
+		return goalReached;
+		
+	}
+
+
+	//Update position of transformation component relative to entity 
+	void update() override {
+		position.x += velocity.x * speed;
+		position.y += velocity.y * speed;
+
+	}
+
+	//Initialize velocity of t.c.
+	void init() override {
+		velocity.zero(); //Zero out the velocity
 	}
 
 
 
 private: 
 	int xPos, yPos;
-	int goalX, goalY;
+	int goalX, startX, goalY, StartY;
+
 };
 
 #endif

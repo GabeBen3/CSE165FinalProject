@@ -1,17 +1,17 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (SDLWindowTest.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (SDLWindowTest.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Game.cpp
-C:\Users\Gymno\Documents\Code\CSE-165\CSE165FinalProject\CSE165Project\SDLWindowTest\TransformComponent.h(57,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Gymno\Documents\Code\CSE-165\CSE165FinalProject\CSE165Project\SDLWindowTest\TransformComponent.h(58,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Gymno\Documents\Code\CSE-165\CSE165FinalProject\CSE165Project\SDLWindowTest\CollisionComponent.h(33,35): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Gymno\Documents\Code\CSE-165\CSE165FinalProject\CSE165Project\SDLWindowTest\CollisionComponent.h(34,35): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Gymno\Documents\Code\CSE-165\CSE165FinalProject\CSE165Project\SDLWindowTest\EntityComponentSystem.h(96,33): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\gabeb\Documents\Spring2023\CSE165\CSE165ProjectFolder\CSE165FinalProject\CSE165Project\SDLWindowTest\TransformComponent.h(55,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\gabeb\Documents\Spring2023\CSE165\CSE165ProjectFolder\CSE165FinalProject\CSE165Project\SDLWindowTest\TransformComponent.h(56,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\gabeb\Documents\Spring2023\CSE165\CSE165ProjectFolder\CSE165FinalProject\CSE165Project\SDLWindowTest\CollisionComponent.h(40,35): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\gabeb\Documents\Spring2023\CSE165\CSE165ProjectFolder\CSE165FinalProject\CSE165Project\SDLWindowTest\CollisionComponent.h(41,35): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\gabeb\Documents\Spring2023\CSE165\CSE165ProjectFolder\CSE165FinalProject\CSE165Project\SDLWindowTest\EntityComponentSystem.h(105,33): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\Gymno\Documents\Code\CSE-165\CSE165FinalProject\CSE165Project\SDLWindowTest\Game.cpp(86): message : see reference to function template instantiation 'T &Entity::addComponent<TransformComponent,int,int>(int &&,int &&)' being compiled
+C:\Users\gabeb\Documents\Spring2023\CSE165\CSE165ProjectFolder\CSE165FinalProject\CSE165Project\SDLWindowTest\Game.cpp(116): message : see reference to function template instantiation 'T &Entity::addComponent<TransformComponent,int,int,int,int>(int &&,int &&,int &&,int &&)' being compiled
           with
           [
               T=TransformComponent
           ]
-  SDLWindowTest.vcxproj -> C:\Users\Gymno\Documents\Code\CSE-165\CSE165FinalProject\CSE165Project\Debug\CSE165Game.exe
+  SDLWindowTest.vcxproj -> C:\Users\gabeb\Documents\Spring2023\CSE165\CSE165ProjectFolder\CSE165FinalProject\CSE165Project\Debug\CSE165Game.exe

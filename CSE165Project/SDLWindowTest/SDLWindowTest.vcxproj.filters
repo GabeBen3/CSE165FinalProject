@@ -42,6 +42,9 @@
     <ClInclude Include="Collision.h">
       <Filter>src\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="SwordComponent.h">
+      <Filter>src\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">

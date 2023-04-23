@@ -6,6 +6,7 @@
 #include "AllComponents.h"
 #include "SDL.h"
 #include "TransformComponent.h"
+#include "TextureManager.h"
 
 #pragma once
 

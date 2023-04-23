@@ -7,6 +7,7 @@
 #include "AllComponents.h"
 #include "Vector2D.h"
 #include "Collision.h"
+#include <vector>
 
 SDL_Renderer* Game::renderer = nullptr;	//Ptr to main renderer
 
@@ -15,15 +16,18 @@ Map* map;	//Instantiate map ptr
 Manager entityManager;	//Instatiate Manager to manage entities in the game
 
 auto& player(entityManager.addEntity());	//Create reference to new entity "player"
+auto& sword(entityManager.addEntity());
 auto& enemy1(entityManager.addEntity());
 auto& enemy2(entityManager.addEntity());
 auto& enemy3(entityManager.addEntity());
 auto& enemy4(entityManager.addEntity());
-auto& wall(entityManager.addEntity());
+
+//vector <Entity> enemies;
+float enemyPos[2][4];
 
 SDL_Event Game::event;		//Instantiate event detector
 
-float enemyPos[2][4];
+
 
 //Game constructor
 Game::Game() {
@@ -35,7 +39,38 @@ Game::~Game() {
 
 }
 
+void Game::deathScreen(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen) {
+	int fullscreenflag = 0;
 
+	if (fullscreen == true) {
+		fullscreenflag = SDL_WINDOW_FULLSCREEN;
+	}
+
+	//Test if SDL is initialized
+	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
+
+		std::cout << "SDL SubSystems Initialized Successfully" << std::endl;
+
+		// Create window obj
+		window = SDL_CreateWindow(title, x_pos, y_pos, width, height, fullscreenflag);
+
+		if (window) {
+			std::cout << "Window Successfully Created" << std::endl;
+		}
+
+		renderer = SDL_CreateRenderer(window, -1, 0);
+
+		if (renderer) {
+
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			std::cout << "Rendered successfully" << std::endl;
+
+		}
+
+		isrunning = true;
+	}
+
+}
 //Initialize the game
 	//Create Game window
 	//Create renderer
@@ -78,34 +113,42 @@ void Game::init(const char* title, int x_pos, int y_pos, int width, int height, 
 	}
 
 	//Add components to entities	
-	player.addComponent<TransformComponent>();	
+	player.addComponent<TransformComponent>(400, 320, 30, 30);	
 	player.addComponent<SpriteComponent>("assets/gutsSprite.png");
 	player.addComponent<Controller>();
 	player.addComponent<ColliderComponent>("player");
+	//player.addComponent<SwordComponent>(45, 26, 50, 50);
 
-	enemy1.addComponent<TransformComponent>(900, 300);
-	enemy1.addComponent<SpriteComponent>("assets/smokeMonster.png", 200, 200);
+	sword.addComponent<TransformComponent>(490, 325, 5, 5);
+	//sword.addComponent<SpriteComponent>("assets/swordCollider.png");
+	sword.addComponent<ColliderComponent>("sword");
+	sword.addComponent<Controller>();
+
+	enemy1.addComponent<TransformComponent>(400, -100);
+	enemy1.addComponent<SpriteComponent>("assets/smokeMonster.png");
 	enemy1.addComponent<ColliderComponent>("enemy1");
-	enemyPos[0][0] = 900;
-	enemyPos[1][0] = 300;
+	enemyPos[0][0] = 400;
+	enemyPos[1][0] = -100;
 
-	enemy2.addComponent<TransformComponent>(400, 700);
-	enemy2.addComponent<SpriteComponent>("assets/smokeMonster.png", 200, 200);
+	enemy2.addComponent<TransformComponent>(900, 320);
+	enemy2.addComponent<SpriteComponent>("assets/smokeMonster.png");
 	enemy2.addComponent<ColliderComponent>("enemy2");
-	enemyPos[0][1] = 400;
-	enemyPos[1][1] = 700;
+	enemyPos[0][1] = 900;
+	enemyPos[1][1] = 320;
 
-	enemy3.addComponent<TransformComponent>(900, 700);
-	enemy3.addComponent<SpriteComponent>("assets/smokeMonster.png", 200, 200);
+	enemy3.addComponent<TransformComponent>(400, 740);
+	enemy3.addComponent<SpriteComponent>("assets/smokeMonster.png");
 	enemy3.addComponent<ColliderComponent>("enemy3");
-	enemyPos[0][2] = 900;
-	enemyPos[1][2] = 700;
+	enemyPos[0][2] = 400;
+	enemyPos[1][2] = 740;
 
-	enemy4.addComponent<TransformComponent>(100, 700);
-	enemy4.addComponent<SpriteComponent>("assets/smokeMonster.png", 200, 200);
+	enemy4.addComponent<TransformComponent>(-100, 320);
+	enemy4.addComponent<SpriteComponent>("assets/smokeMonster.png");
 	enemy4.addComponent<ColliderComponent>("enemy4");
-	enemyPos[0][3] = 100;
-	enemyPos[1][3] = 700;
+	enemyPos[0][3] = -100;
+	enemyPos[1][3] = 320;
+
+
 
 
 
@@ -133,60 +176,70 @@ void Game::eventHandler() {
 //All game objs will have their own update funcs -> updating scores, movement, assets, etc... 
 void Game::update() {
 
+	bool gameOver = false;
+
 	Vector2D playerPosition = player.getComponent<TransformComponent>().position;
-
-	/*Vector2D playerPosition = player.getComponent<TransformComponent>().position;
-	Vector2D enemyPosition = enemy.getComponent<TransformComponent>().position;
-	float dx = playerPosition.x - enemyPosition.x;
-	float dy = playerPosition.y - enemyPosition.y;
-	float distance = sqrt(dx * dx + dy * dy);
-	if (distance > 0) {
-		enemy.getComponent<TransformComponent>().velocity.x = dx / distance * 3;
-		enemy.getComponent<TransformComponent>().velocity.y = dy / distance * 3;
-	}*/
-
-	enemy1.getComponent<TransformComponent>().stepTowards(playerPosition);
-	enemy2.getComponent<TransformComponent>().stepTowards(playerPosition);
-	enemy3.getComponent<TransformComponent>().stepTowards(playerPosition);
-	enemy4.getComponent<TransformComponent>().stepTowards(playerPosition);
+	Vector2D swordPosition = sword.getComponent<TransformComponent>().position;
 
 
 	entityManager.refresh();	//Check if entities need to be removed from world
 	entityManager.update();	//Update all components of all entities
 
+	if (
+		enemy1.getComponent<TransformComponent>().stepTowards(playerPosition) ||
+		enemy2.getComponent<TransformComponent>().stepTowards(playerPosition) ||
+		enemy3.getComponent<TransformComponent>().stepTowards(playerPosition) ||
+		enemy4.getComponent<TransformComponent>().stepTowards(playerPosition)  )
+	{
+		gameOver = true;
+		//std::cout << "Killed" << std::endl;
+	}
 
-	if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
+	if ((player.getComponent<Controller>().flippedLeft == true)) {
+		sword.getComponent<TransformComponent>().position.x = playerPosition.x + 30;
+	}
+	else {
+		sword.getComponent<TransformComponent>().position.x = playerPosition.x + 100;
+	}
+
+	if (Collision::AABB(sword.getComponent<ColliderComponent>().collider,
 		enemy1.getComponent<ColliderComponent>().collider)) {
 
-		std::cout << "Collision Detected - Enemy 1" << std::endl;
+		//std::cout << "Collision Detected - Enemy 1" << std::endl;
 		enemy1.getComponent<TransformComponent>().position.x = enemyPos[0][0];
 		enemy1.getComponent<TransformComponent>().position.y = enemyPos[1][0];
 	}
 
-	if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
+	if (Collision::AABB(sword.getComponent<ColliderComponent>().collider,
 		enemy2.getComponent<ColliderComponent>().collider)) {
 
-		std::cout << "Collision Detected - Enemy 2" << std::endl;
+		//std::cout << "Collision Detected - Enemy 2" << std::endl;
 		enemy2.getComponent<TransformComponent>().position.x = enemyPos[0][1];
 		enemy2.getComponent<TransformComponent>().position.y = enemyPos[1][1];
 	}
 
-	if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
+	if (Collision::AABB(sword.getComponent<ColliderComponent>().collider,
 		enemy3.getComponent<ColliderComponent>().collider)) {
 
-		std::cout << "Collision Detected - Enemy 3" << std::endl;
+		//std::cout << "Collision Detected - Enemy 3" << std::endl;
 		enemy3.getComponent<TransformComponent>().position.x = enemyPos[0][2];
 		enemy3.getComponent<TransformComponent>().position.y = enemyPos[1][2];
 	}
 
-	if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
+	if (Collision::AABB(sword.getComponent<ColliderComponent>().collider,
 		enemy4.getComponent<ColliderComponent>().collider)) {
 
-		std::cout << "Collision Detected - Enemy 4" << std::endl;
+		//std::cout << "Collision Detected - Enemy 4" << std::endl;
 		enemy4.getComponent<TransformComponent>().position.x = enemyPos[0][3];
 		enemy4.getComponent<TransformComponent>().position.y = enemyPos[1][3];
 	}
 
+	if (gameOver) {
+		std::cout << "Game Over - Restarting" << std::endl;
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		Game::init("Main Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false);
+	}
 
 }
 

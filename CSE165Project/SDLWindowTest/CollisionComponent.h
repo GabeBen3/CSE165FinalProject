@@ -19,6 +19,12 @@ public:
 
 	}
 
+	ColliderComponent(std::string _tag, int _width, int _height) {
+		tag = _tag;
+		collider.w = _width;
+		collider.h = _height;
+	}
+
 	void init() override {
 
 		if (!entity->hasComponent<TransformComponent>()) {
@@ -27,6 +33,7 @@ public:
 
 		transform = &entity->getComponent<TransformComponent>();
 	}
+
 
 	//Set collision rectangle vars 
 	void update() override {

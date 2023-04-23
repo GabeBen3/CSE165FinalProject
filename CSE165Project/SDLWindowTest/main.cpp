@@ -52,6 +52,8 @@ int main(int argc, char* argv[]) {
 
 	}
 
+
+
 	//Clear game from memory
 	game->clean();
 
